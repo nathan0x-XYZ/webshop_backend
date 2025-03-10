@@ -112,3 +112,13 @@ export async function roleMiddleware(
   
   return user;
 }
+
+// Export auth object with all functions
+export const auth = {
+  signJWT,
+  verifyJWT,
+  getCurrentUser,
+  authMiddleware,
+  hasRequiredRole,
+  roleMiddleware
+};

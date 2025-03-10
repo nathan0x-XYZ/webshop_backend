@@ -7,9 +7,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
+    // 使用 auth.getCurrentUser() 代替 auth()
+    const user = await auth.getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json(
         { message: "Unauthorized" },
         { status: 401 }

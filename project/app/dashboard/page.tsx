@@ -51,7 +51,16 @@ function ChartSkeleton() {
   );
 }
 
-function StatCard({ title, value, icon, change, isPositive }) {
+// 為 StatCard 組件添加類型定義
+interface StatCardProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  change: string;
+  isPositive: boolean;
+}
+
+function StatCard({ title, value, icon, change, isPositive }: StatCardProps) {
   return (
     <Card className="transition-all duration-300 hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -72,7 +81,15 @@ function StatCard({ title, value, icon, change, isPositive }) {
   );
 }
 
-function PurchaseItem({ number, collection, status, statusColor }) {
+// 為 PurchaseItem 組件添加類型定義
+interface PurchaseItemProps {
+  number: string;
+  collection: string;
+  status: string;
+  statusColor: string;
+}
+
+function PurchaseItem({ number, collection, status, statusColor }: PurchaseItemProps) {
   return (
     <div className="flex items-center justify-between border-b pb-4">
       <div className="flex items-center space-x-3">

@@ -37,8 +37,24 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// 定義類別的類型
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  productCount: number;
+  status: string;
+}
+
+// 擴展 Window 接口
+declare global {
+  interface Window {
+    updatedCategories: Category[];
+  }
+}
+
 // Mock categories data - this would normally be in a database
-const mockCategories = [
+const mockCategories: Category[] = [
   {
     id: "1",
     name: "Shirts",
@@ -90,7 +106,7 @@ if (typeof window !== 'undefined' && !window.hasOwnProperty('updatedCategories')
 
 const categorySchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  description: z.string().optional(),
+  description: z.string(),
   status: z.enum(["Active", "Inactive"]),
 });
 
@@ -101,7 +117,7 @@ export default function EditCategoryPage({ params }: { params: { id: string } })
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
-  const [category, setCategory] = useState<any | null>(null);
+  const [category, setCategory] = useState<Category | null>(null);
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -130,7 +146,7 @@ export default function EditCategoryPage({ params }: { params: { id: string } })
             setCategory(foundCategory);
             form.reset({
               name: foundCategory.name,
-              description: foundCategory.description || "",
+              description: foundCategory.description,
               status: foundCategory.status as "Active" | "Inactive",
             });
           }

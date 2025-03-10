@@ -36,8 +36,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+// 定義類別的類型
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  productCount: number;
+  status: string;
+}
+
+// 擴展 Window 接口
+declare global {
+  interface Window {
+    updatedCategories: Category[];
+  }
+}
+
 // Mock categories data - this would normally be in a database
-const mockCategories = [
+const mockCategories: Category[] = [
   {
     id: "1",
     name: "Shirts",
@@ -130,9 +146,11 @@ export default function NewCategoryPage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Create a new category with a unique ID
-      const newCategory = {
+      const newCategory: Category = {
         id: `${Date.now()}`, // Generate a unique ID
-        ...data,
+        name: data.name,
+        description: data.description || "", // 確保 description 不是 undefined
+        status: data.status,
         productCount: 0, // New categories start with 0 products
       };
       

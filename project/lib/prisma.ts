@@ -296,10 +296,151 @@ class MockPrismaClient {
     }
   };
 
+  purchaseItem = {
+    findFirst: async (args?: any) => {
+      return null; // 返回 null 表示沒有找到記錄
+    },
+    findMany: async (args?: any) => {
+      return []; // 返回空數組
+    },
+    create: async (args?: any) => {
+      return { id: 'mock-purchase-item-id', ...args?.data };
+    },
+    update: async (args?: any) => {
+      return { id: 'mock-purchase-item-id', ...args?.data };
+    },
+    delete: async (args?: any) => {
+      return { id: 'mock-purchase-item-id' };
+    },
+  };
+
+  salesItem = {
+    findFirst: async (args?: any) => {
+      return null; // 返回 null 表示沒有找到記錄
+    },
+    findMany: async (args?: any) => {
+      return []; // 返回空數組
+    },
+    create: async (args?: any) => {
+      return { id: 'mock-sales-item-id', ...args?.data };
+    },
+    update: async (args?: any) => {
+      return { id: 'mock-sales-item-id', ...args?.data };
+    },
+    delete: async (args?: any) => {
+      return { id: 'mock-sales-item-id' };
+    },
+  };
+
+  transferItem = {
+    findFirst: async (args?: any) => {
+      return null; // 返回 null 表示沒有找到記錄
+    },
+    findMany: async (args?: any) => {
+      return []; // 返回空數組
+    },
+    create: async (args?: any) => {
+      return { id: 'mock-transfer-item-id', ...args?.data };
+    },
+    update: async (args?: any) => {
+      return { id: 'mock-transfer-item-id', ...args?.data };
+    },
+    delete: async (args?: any) => {
+      return { id: 'mock-transfer-item-id' };
+    },
+  };
+
+  auditItem = {
+    findFirst: async (args?: any) => {
+      return null; // 返回 null 表示沒有找到記錄
+    },
+    findMany: async (args?: any) => {
+      return []; // 返回空數組
+    },
+    create: async (args?: any) => {
+      return { id: 'mock-audit-item-id', ...args?.data };
+    },
+    update: async (args?: any) => {
+      return { id: 'mock-audit-item-id', ...args?.data };
+    },
+    delete: async (args?: any) => {
+      return { id: 'mock-audit-item-id' };
+    },
+  };
+
+  salesOrder = {
+    count: async (args?: any) => {
+      return 0; // 返回計數為 0
+    },
+    findMany: async (args?: any) => {
+      return [
+        {
+          id: 'mock-sales-order-id',
+          salesNumber: 'SO-20250310-0001',
+          warehouseId: 'mock-warehouse-id',
+          status: 'COMPLETED',
+          salesDate: new Date(),
+          customerName: 'Mock Customer',
+          customerContact: '123456789',
+          notes: 'Mock notes',
+          totalAmount: 100,
+          items: [],
+          warehouse: { name: 'Mock Warehouse' },
+          createdBy: { name: 'Mock User' },
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }
+      ]; // 返回模擬數據
+    },
+    create: async (args?: any) => {
+      return { 
+        id: 'mock-sales-order-id', 
+        salesNumber: args?.data?.salesNumber || 'SO-20250310-0001',
+        ...args?.data 
+      };
+    },
+    update: async (args?: any) => {
+      return { id: 'mock-sales-order-id', ...args?.data };
+    },
+    delete: async (args?: any) => {
+      return { id: 'mock-sales-order-id' };
+    },
+  };
+
+  $transaction = async (callback: any) => {
+    // 簡單的事務模擬，直接執行回調
+    return await callback({
+      // 在事務中使用的模型
+      inventoryItem: {
+        findUnique: async (args?: any) => {
+          return { 
+            id: 'mock-inventory-item-id', 
+            productId: args?.where?.productId_warehouseId?.productId || 'mock-product-id',
+            warehouseId: args?.where?.productId_warehouseId?.warehouseId || 'mock-warehouse-id',
+            quantity: 100, // 假設庫存充足
+          };
+        },
+        update: async (args?: any) => {
+          return { id: 'mock-inventory-item-id', ...args?.data };
+        },
+      },
+      salesOrder: {
+        create: async (args?: any) => {
+          return { 
+            id: 'mock-sales-order-id', 
+            salesNumber: args?.data?.salesNumber || 'SO-20250310-0001',
+            ...args?.data 
+          };
+        },
+      },
+    });
+  };
+
   // Add other models as needed for the application
 }
 
 // Use the mock client
-const prisma = new MockPrismaClient();
+const prismaClient = new MockPrismaClient();
 
-export default prisma;
+export default prismaClient;
+export { prismaClient as prisma };

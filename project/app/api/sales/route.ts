@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
-export async function GET(request: Request) {
+export async function GET(request: Request): Promise<NextResponse> {
   try {
-    const session = await auth();
+    // 使用 auth.getCurrentUser() 代替 auth()
+    const user = await auth.getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json(
         { message: "Unauthorized" },
         { status: 401 }
@@ -43,8 +44,8 @@ export async function GET(request: Request) {
     });
     
     // 格式化響應數據
-    const formattedOrders = salesOrders.map((order) => {
-      const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
+    const formattedOrders = salesOrders.map((order: any) => {
+      const totalItems = order.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
       
       return {
         id: order.id,
@@ -74,18 +75,19 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextResponse> {
   try {
-    const session = await auth();
+    // 使用 auth.getCurrentUser() 代替 auth()
+    const user = await auth.getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json(
         { message: "Unauthorized" },
         { status: 401 }
       );
     }
     
-    const userId = session.user.id;
+    const userId = user.id;
     const data = await request.json();
     
     // 驗證必要字段
@@ -111,7 +113,7 @@ export async function POST(request: Request) {
     const salesNumber = `SO-${year}${month}-${String(salesCount + 1).padStart(4, '0')}`;
     
     // 開始事務處理
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // 檢查每個商品的庫存
       for (const item of data.items) {
         const inventory = await tx.inventoryItem.findUnique({
@@ -146,7 +148,7 @@ export async function POST(request: Request) {
           createdById: userId,
           updatedById: userId,
           items: {
-            create: data.items.map((item) => ({
+            create: data.items.map((item: any) => ({
               productId: item.productId,
               quantity: item.quantity,
               unitPrice: item.unitPrice,

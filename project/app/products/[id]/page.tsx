@@ -83,11 +83,11 @@ export default function ProductDetailPage() {
 
   const getStockStatus = (stock: number, safetyStock: number) => {
     if (stock <= 0) {
-      return { label: "Out of Stock", variant: "destructive" };
+      return { label: "Out of Stock", variant: "destructive" as const };
     } else if (stock <= safetyStock) {
-      return { label: "Low Stock", variant: "destructive" };
+      return { label: "Low Stock", variant: "destructive" as const };
     } else {
-      return { label: "In Stock", variant: "outline" };
+      return { label: "In Stock", variant: "outline" as const };
     }
   };
 
@@ -177,7 +177,6 @@ export default function ProductDetailPage() {
               id={product.id}
               name={product.name}
               onDelete={handleDelete}
-              confirmText="Are you sure you want to delete this product? This action cannot be undone."
             />
           </CardFooter>
         </Card>
