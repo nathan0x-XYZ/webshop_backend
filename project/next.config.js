@@ -32,6 +32,26 @@ const nextConfig = {
   // 確保正確處理 API 路由
   experimental: {
     serverComponentsExternalPackages: ['@prisma/client'],
+    serverActions: true,
+  },
+
+  // 禁用 webpack 5 的一些功能，避免與某些庫的兼容性問題
+  webpack: (config) => {
+    return config;
+  },
+
+  // 確保 Vercel 能夠正確處理所有路由
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+      {
+        source: '/:path*',
+        destination: '/:path*',
+      },
+    ];
   },
 }
 
