@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 // Paths that don't require authentication
 const publicPaths = ["/", "/login"];
 
-export async function middleware(request: NextRequest) {
-  // 完全禁用 middleware，允許所有請求通過
+// 簡化的中間件，不使用任何不支持的模塊
+export function middleware() {
   return NextResponse.next();
 }
 
