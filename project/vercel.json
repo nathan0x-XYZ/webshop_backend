@@ -5,7 +5,9 @@
   "outputDirectory": ".next",
   "routes": [
     { "src": "/test.html", "dest": "/test.html" },
+    { "src": "/minimal", "dest": "/minimal" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/$1" }
   ],
   "env": {
