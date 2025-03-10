@@ -4,24 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 const publicPaths = ["/", "/login"];
 
 export async function middleware(request: NextRequest) {
-  // With client-side authentication using localStorage, we don't need
-  // server-side middleware for authentication checks.
-  // The client components will handle redirects based on auth state.
-  
-  // Just pass through all requests
+  // 完全禁用 middleware，允許所有請求通過
   return NextResponse.next();
 }
 
-// Update the matcher to exclude API routes from middleware
+// 完全禁用 matcher，不攔截任何請求
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: [],
 };
