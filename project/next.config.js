@@ -13,9 +13,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // 使用標準輸出
-  output: 'standalone',
-  
   // 環境變量
   env: {
     IS_WEBCONTAINER: process.env.IS_WEBCONTAINER || 'false',
@@ -24,23 +21,6 @@ const nextConfig = {
   // 禁用 image optimization，避免可能的問題
   images: {
     unoptimized: true,
-  },
-
-  // 確保所有路由都能正確處理
-  trailingSlash: false,
-  
-  // 確保正確處理 API 路由和處理 cookies 問題
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
-    serverActions: true,
-  },
-  
-  // 關閉源碼映射，減少構建大小
-  productionBrowserSourceMaps: false,
-  
-  // 禁用 webpack 5 的一些功能，避免與某些庫的兼容性問題
-  webpack: (config) => {
-    return config;
   },
 }
 
