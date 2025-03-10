@@ -11,18 +11,27 @@ export async function POST(request: NextRequest) {
     
     // 根據請求的角色創建測試用戶
     let userRole = UserRole.MANAGER; // 默認為 MANAGER
+    let email = "manager@example.com";
+    let name = "Test Manager";
+    let id = "test-manager-id";
     
     if (role === "ADMIN") {
       userRole = UserRole.ADMIN;
+      email = "admin2@example.com";
+      name = "Test Admin";
+      id = "test-admin-id";
     } else if (role === "STAFF") {
       userRole = UserRole.STAFF;
+      email = "staff@example.com";
+      name = "Test Staff";
+      id = "test-staff-id";
     }
     
     // 創建測試用戶
     const testUser = {
-      id: `test-${userRole.toLowerCase()}-id`,
-      email: `${userRole.toLowerCase()}@example.com`,
-      name: `Test ${userRole}`,
+      id,
+      email,
+      name,
       role: userRole,
     };
     
