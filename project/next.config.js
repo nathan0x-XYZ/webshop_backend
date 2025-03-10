@@ -1,40 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 確保沒有 output: 'export' 以允許 API 路由運行
+  // 禁用 React 嚴格模式
   reactStrictMode: false,
   
+  // 禁用 TypeScript 類型檢查
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  
+  // 禁用 ESLint
   eslint: {
     ignoreDuringBuilds: true,
   },
-  typescript: {
-    // !! 警告 !!
-    // 在生產環境中禁用類型檢查是不推薦的做法
-    // 這只是一個臨時解決方案，用於解決部署問題
-    ignoreBuildErrors: true,
-  },
-  images: { 
-    unoptimized: true,
-    domains: ['vercel.app', 'localhost']
-  },
-  // 添加環境變量配置
-  env: {
-    IS_WEBCONTAINER: process.env.IS_WEBCONTAINER || "false",
-    JWT_SECRET: process.env.JWT_SECRET || 'fashion-inventory-jwt-secret-key',
-  },
+  
+  // 使用標準輸出
   output: 'standalone',
-  // 確保 Vercel 可以正確處理 API 路由
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
-      {
-        source: '/',
-        destination: '/index.html',
-      },
-    ];
+  
+  // 環境變量
+  env: {
+    IS_WEBCONTAINER: process.env.IS_WEBCONTAINER || 'false',
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
