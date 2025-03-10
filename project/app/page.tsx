@@ -2,44 +2,119 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Fashion Inventory System</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Link href="/dashboard" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">儀表板</h2>
-          <p className="text-gray-600">查看庫存概況和重要指標</p>
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#111827', 
+      color: 'white',
+      padding: '2rem'
+    }}>
+      <header style={{
+        backgroundColor: '#1F2937',
+        padding: '1rem',
+        marginBottom: '2rem',
+        borderRadius: '0.5rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div>
+          <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Fashion Inventory</span>
+        </div>
+        <Link href="/login" style={{
+          backgroundColor: '#374151',
+          padding: '0.5rem 1rem',
+          borderRadius: '0.25rem',
+          color: 'white',
+          textDecoration: 'none'
+        }}>
+          Login
         </Link>
-        
-        <Link href="/products" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">產品管理</h2>
-          <p className="text-gray-600">管理產品目錄和庫存水平</p>
-        </Link>
-        
-        <Link href="/categories" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">類別管理</h2>
-          <p className="text-gray-600">管理產品類別和分類</p>
-        </Link>
-        
-        <Link href="/orders" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">訂單管理</h2>
-          <p className="text-gray-600">處理訂單和跟踪訂單狀態</p>
-        </Link>
-        
-        <Link href="/suppliers" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">供應商管理</h2>
-          <p className="text-gray-600">管理供應商和採購訂單</p>
-        </Link>
-        
-        <Link href="/reports" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">報表和分析</h2>
-          <p className="text-gray-600">生成庫存報表和銷售分析</p>
-        </Link>
-      </div>
-      
-      <div className="mt-8 text-sm text-gray-500">
-        <p>頁面生成時間: {new Date().toISOString()}</p>
-      </div>
+      </header>
+
+      <main>
+        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+            Fashion Retail Inventory Management System
+          </h1>
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#9CA3AF',
+            maxWidth: '48rem',
+            margin: '0 auto'
+          }}>
+            A comprehensive solution for managing your fashion retail inventory,
+            from products and suppliers to sales and reporting.
+          </p>
+          <Link href="/login" style={{
+            display: 'inline-block',
+            marginTop: '2rem',
+            backgroundColor: '#2563EB',
+            color: 'white',
+            fontWeight: 'bold',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '0.5rem',
+            textDecoration: 'none'
+          }}>
+            Get Started
+          </Link>
+        </div>
+
+        <div style={{ marginTop: '5rem' }}>
+          <h2 style={{ 
+            fontSize: '1.5rem', 
+            fontWeight: 'bold', 
+            textAlign: 'center',
+            marginBottom: '3rem'
+          }}>
+            Key Features
+          </h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem'
+          }}>
+            <div style={{ 
+              backgroundColor: '#1F2937', 
+              padding: '1.5rem',
+              borderRadius: '0.5rem'
+            }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 'semibold', marginBottom: '1rem' }}>
+                Product Management
+              </h3>
+              <p style={{ color: '#9CA3AF' }}>
+                Manage your products with categories, safety stock levels, and cost tracking.
+              </p>
+            </div>
+            
+            <div style={{ 
+              backgroundColor: '#1F2937', 
+              padding: '1.5rem',
+              borderRadius: '0.5rem'
+            }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 'semibold', marginBottom: '1rem' }}>
+                Inventory Control
+              </h3>
+              <p style={{ color: '#9CA3AF' }}>
+                Track inventory across multiple warehouses with transfers and auditing.
+              </p>
+            </div>
+            
+            <div style={{ 
+              backgroundColor: '#1F2937', 
+              padding: '1.5rem',
+              borderRadius: '0.5rem'
+            }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 'semibold', marginBottom: '1rem' }}>
+                Purchase & Sales
+              </h3>
+              <p style={{ color: '#9CA3AF' }}>
+                Manage the complete lifecycle from purchasing to sales with automatic cost updates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

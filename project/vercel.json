@@ -2,6 +2,8 @@
   "version": 2,
   "framework": "nextjs",
   "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
+  "outputDirectory": ".next",
   "env": {
     "IS_WEBCONTAINER": "false",
     "NODE_ENV": "production"
