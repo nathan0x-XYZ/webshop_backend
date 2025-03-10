@@ -10,12 +10,24 @@ const nextConfig = {
     // 這只是一個臨時解決方案，用於解決部署問題
     ignoreBuildErrors: true,
   },
-  images: { unoptimized: true },
+  images: { 
+    unoptimized: true,
+    domains: ['vercel.app', 'localhost']
+  },
   // 添加環境變量配置
   env: {
     IS_WEBCONTAINER: true,
     JWT_SECRET: 'fashion-inventory-jwt-secret-key',
   },
+  // 確保 Vercel 可以正確處理 API 路由
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      }
+    ]
+  }
 };
 
 module.exports = nextConfig;
