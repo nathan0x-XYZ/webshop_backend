@@ -10,6 +10,21 @@ export interface AuthUser {
   role: UserRole;
 }
 
+// 檢查是否是 Vercel 預覽環境
+const isVercelPreview = () => {
+  return process.env.VERCEL_ENV === 'preview' || process.env.VERCEL_ENV === 'development';
+};
+
+// 為預覽環境創建一個測試用戶
+const getTestUser = (): AuthUser => {
+  return {
+    id: 'test-user-id',
+    email: 'test@example.com',
+    name: 'Test User',
+    role: UserRole.ADMIN
+  };
+};
+
 // Function to sign JWT
 export async function signJWT(payload: AuthUser) {
   try {
@@ -44,12 +59,18 @@ export async function verifyJWT(token: string): Promise<AuthUser | null> {
 // Function to get current user from cookies
 export async function getCurrentUser(): Promise<AuthUser | null> {
   try {
+    // 在預覽環境中返回測試用戶
+    if (isVercelPreview()) {
+      console.log('Using test user for preview environment');
+      return getTestUser();
+    }
+    
     const cookieStore = cookies();
     const token = cookieStore.get('token')?.value;
     
     if (!token) return null;
     
-    return verifyJWT(token);
+    return await verifyJWT(token);
   } catch (error) {
     console.error("Error getting current user:", error);
     return null;
@@ -59,6 +80,12 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 // Middleware to check authentication
 export async function authMiddleware(req: NextRequest) {
   try {
+    // 在預覽環境中繞過身份驗證
+    if (isVercelPreview()) {
+      console.log('Skipping authentication for preview environment');
+      return getTestUser();
+    }
+    
     const token = req.cookies.get('token')?.value;
     
     if (!token) {
