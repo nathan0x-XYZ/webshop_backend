@@ -1,0 +1,246 @@
+Folder PATH listing for volume Windows
+Volume serial number is E0D3-E14F
+C:.
+|   .env
+|   .env.example
+|   .eslintrc.json
+|   .gitignore
+|   components.json
+|   middleware.ts
+|   netlify.toml
+|   next.config.js
+|   package-lock.json
+|   package.json
+|   postcss.config.js
+|   project_structure.txt
+|   README.md
+|   repomix-output.md
+|   tailwind.config.ts
+|   tsconfig.json
+|   
++---.bolt
+|       config.json
+|       ignore
+|       prompt
+|       
++---app
+|   |   globals.css
+|   |   layout.tsx
+|   |   not-found.tsx
+|   |   page.tsx
+|   |   
+|   +---(protected)
+|   |       layout.tsx
+|   |       
+|   +---api
+|   |   \---auth
+|   |       +---login
+|   |       |       route.ts
+|   |       |       
+|   |       +---logout
+|   |       |       route.ts
+|   |       |       
+|   |       +---me
+|   |       |       route.ts
+|   |       |       
+|   |       \---register
+|   |               route.ts
+|   |               
+|   +---categories
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   +---new
+|   |   |       page.tsx
+|   |   |       
+|   |   \---[id]
+|   |       |   page.tsx
+|   |       |   
+|   |       \---edit
+|   |               page.tsx
+|   |               
+|   +---dashboard
+|   |       layout.tsx
+|   |       page.tsx
+|   |       
+|   +---inventory-audit
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   \---[id]
+|   |           page.tsx
+|   |           
+|   +---login
+|   |       page.tsx
+|   |       
+|   +---products
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   +---new
+|   |   |       page.tsx
+|   |   |       
+|   |   \---[id]
+|   |       |   page.tsx
+|   |       |   
+|   |       \---edit
+|   |               page.tsx
+|   |               
+|   +---purchases
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   +---edit
+|   |   |       page.tsx
+|   |   |       
+|   |   +---new
+|   |   |       page.tsx
+|   |   |       
+|   |   \---[id]
+|   |       |   page.tsx
+|   |       |   
+|   |       \---edit
+|   |               page.tsx
+|   |               
+|   +---reports
+|   |       layout.tsx
+|   |       page.tsx
+|   |       
+|   +---sales
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   \---[id]
+|   |           page.tsx
+|   |           
+|   +---settings
+|   |       layout.tsx
+|   |       page.tsx
+|   |       
+|   +---suppliers
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   +---new
+|   |   |       page.tsx
+|   |   |       
+|   |   \---[id]
+|   |       |   page.tsx
+|   |       |   
+|   |       \---edit
+|   |               page.tsx
+|   |               
+|   +---transfers
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   +---new
+|   |   |       page.tsx
+|   |   |       
+|   |   \---[id]
+|   |       |   page.tsx
+|   |       |   
+|   |       \---edit
+|   |               page.tsx
+|   |               
+|   +---users
+|   |       layout.tsx
+|   |       page.tsx
+|   |       
+|   \---warehouses
+|       |   layout.tsx
+|       |   page.tsx
+|       |   
+|       +---new
+|       |       page.tsx
+|       |       
+|       \---[id]
+|           |   page.tsx
+|           |   
+|           \---edit
+|                   page.tsx
+|                   
++---components
+|   |   theme-provider.tsx
+|   |   
+|   +---dashboard
+|   |       charts.tsx
+|   |       
+|   +---layout
+|   |       header.tsx
+|   |       sidebar.tsx
+|   |       
+|   +---purchases
+|   |       product-selector.tsx
+|   |       
+|   +---shared
+|   |       delete-button.tsx
+|   |       
+|   +---transfers
+|   |       product-transfer-selector.tsx
+|   |       
+|   \---ui
+|           accordion.tsx
+|           alert-dialog.tsx
+|           alert.tsx
+|           aspect-ratio.tsx
+|           avatar.tsx
+|           badge.tsx
+|           breadcrumb.tsx
+|           button.tsx
+|           calendar.tsx
+|           card.tsx
+|           carousel.tsx
+|           chart.tsx
+|           checkbox.tsx
+|           collapsible.tsx
+|           command.tsx
+|           context-menu.tsx
+|           dialog.tsx
+|           drawer.tsx
+|           dropdown-menu.tsx
+|           form.tsx
+|           hover-card.tsx
+|           input-otp.tsx
+|           input.tsx
+|           label.tsx
+|           menubar.tsx
+|           navigation-menu.tsx
+|           pagination.tsx
+|           popover.tsx
+|           progress.tsx
+|           radio-group.tsx
+|           resizable.tsx
+|           scroll-area.tsx
+|           select.tsx
+|           separator.tsx
+|           sheet.tsx
+|           skeleton.tsx
+|           slider.tsx
+|           sonner.tsx
+|           switch.tsx
+|           table.tsx
+|           tabs.tsx
+|           textarea.tsx
+|           toast.tsx
+|           toaster.tsx
+|           toggle-group.tsx
+|           toggle.tsx
+|           tooltip.tsx
+|           
++---hooks
+|       use-auth.tsx
+|       use-toast.ts
+|       
++---lib
+|       auth.ts
+|       mock-data.ts
+|       prisma.ts
+|       utils.ts
+|       
++---prisma
+|       schema.prisma
+|       
+\---scripts
+        seed.ts
+        

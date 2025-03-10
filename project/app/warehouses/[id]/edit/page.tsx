@@ -1,0 +1,328 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Mock warehouses data - this would normally be in a database
+const mockWarehouses = [
+  {
+    id: "1",
+    name: "Main Store",
+    location: "789 Main St, Retail City",
+    description: "Main retail location and warehouse",
+    totalItems: 425,
+    status: "Active",
+  },
+  {
+    id: "2",
+    name: "Downtown Branch",
+    location: "101 Downtown Ave, Retail City",
+    description: "Downtown retail branch",
+    totalItems: 175,
+    status: "Active",
+  },
+  {
+    id: "3",
+    name: "Mall Outlet",
+    location: "Westfield Mall, Shopping District",
+    description: "Small outlet in the shopping mall",
+    totalItems: 125,
+    status: "Active",
+  },
+  {
+    id: "4",
+    name: "Distribution Center",
+    location: "456 Logistics Blvd, Industrial Zone",
+    description: "Main distribution and storage facility",
+    totalItems: 1250,
+    status: "Active",
+  },
+  {
+    id: "5",
+    name: "Seasonal Pop-up",
+    location: "Beach Boulevard, Tourist Area",
+    description: "Seasonal location for summer collection",
+    totalItems: 85,
+    status: "Inactive",
+  },
+];
+
+// Create a global variable to store the updated warehouses if it doesn't exist
+if (typeof window !== 'undefined' && !window.hasOwnProperty('updatedWarehouses')) {
+  window.updatedWarehouses = [...mockWarehouses];
+}
+
+const warehouseSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+  location: z.string().min(2, { message: "Location must be at least 2 characters" }),
+  description: z.string().optional(),
+  status: z.enum(["Active", "Inactive"]),
+});
+
+type WarehouseFormValues = z.infer<typeof warehouseSchema>;
+
+export default function EditWarehousePage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [warehouse, setWarehouse] = useState<any | null>(null);
+
+  const form = useForm<WarehouseFormValues>({
+    resolver: zodResolver(warehouseSchema),
+    defaultValues: {
+      name: "",
+      location: "",
+      description: "",
+      status: "Active",
+    },
+  });
+
+  useEffect(() => {
+    // Fetch warehouse data
+    const fetchWarehouse = async () => {
+      setIsFetching(true);
+      try {
+        // In a real app, this would be an API call
+        // const response = await fetch(`/api/warehouses/${params.id}`);
+        // const data = await response.json();
+        
+        // Get data from our mock database (window.updatedWarehouses)
+        setTimeout(() => {
+          const warehouses = typeof window !== 'undefined' ? window.updatedWarehouses : mockWarehouses;
+          const foundWarehouse = warehouses.find(w => w.id === params.id);
+          
+          if (foundWarehouse) {
+            setWarehouse(foundWarehouse);
+            form.reset({
+              name: foundWarehouse.name,
+              location: foundWarehouse.location || "",
+              description: foundWarehouse.description || "",
+              status: foundWarehouse.status as "Active" | "Inactive",
+            });
+          }
+          
+          setIsFetching(false);
+        }, 1000);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load warehouse details",
+          variant: "destructive",
+        });
+        setIsFetching(false);
+      }
+    };
+
+    fetchWarehouse();
+  }, [params.id, toast, form]);
+
+  async function onSubmit(data: WarehouseFormValues) {
+    setIsLoading(true);
+    
+    try {
+      // In a real application, this would be an API call
+      // const response = await fetch(`/api/warehouses/${params.id}`, {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
+      
+      // if (!response.ok) {
+      //   throw new Error("Failed to update warehouse");
+      // }
+      
+      // Simulate API call and update our mock database
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update the warehouse in our mock database
+      if (typeof window !== 'undefined') {
+        const index = window.updatedWarehouses.findIndex(w => w.id === params.id);
+        if (index !== -1) {
+          window.updatedWarehouses[index] = {
+            ...window.updatedWarehouses[index],
+            ...data
+          };
+          
+          // Log the updated warehouses for debugging
+          console.log("Updated warehouses:", window.updatedWarehouses);
+        }
+      }
+      
+      toast({
+        title: "Warehouse updated",
+        description: "The warehouse has been updated successfully.",
+      });
+      
+      router.push(`/warehouses/${params.id}`);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-4 animate-in fade-in duration-500">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <Link href={`/warehouses/${params.id}`}>
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+        </Button>
+        <h1 className="text-3xl font-bold tracking-tight">
+          {isFetching ? <Skeleton className="h-9 w-40" /> : `Edit ${warehouse?.name}`}
+        </h1>
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Warehouse Information</CardTitle>
+          <CardDescription>
+            Update the warehouse details
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isFetching ? (
+            <div className="space-y-4">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ) : (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Warehouse Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Warehouse Location" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        The physical address or location of this warehouse
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Warehouse description..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Active">Active</SelectItem>
+                          <SelectItem value="Inactive">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push(`/warehouses/${params.id}`)}
+                    type="button"
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={isLoading}>
+                    {isLoading ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
