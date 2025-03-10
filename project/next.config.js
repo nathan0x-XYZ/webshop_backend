@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 確保沒有 output: 'export' 以允許 API 路由運行
+  reactStrictMode: false,
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -19,6 +21,7 @@ const nextConfig = {
     IS_WEBCONTAINER: process.env.IS_WEBCONTAINER || "false",
     JWT_SECRET: process.env.JWT_SECRET || 'fashion-inventory-jwt-secret-key',
   },
+  output: 'standalone',
   // 確保 Vercel 可以正確處理 API 路由
   async rewrites() {
     return [

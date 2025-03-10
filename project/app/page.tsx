@@ -20,11 +20,25 @@ export default function Home() {
           Login
         </a>
         <a 
-          href="/api/test" 
+          href="/api/hello" 
           style={{ 
             display: 'inline-block',
             padding: '10px 20px',
             backgroundColor: '#4CAF50',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '5px',
+            marginRight: '10px'
+          }}
+        >
+          Hello API
+        </a>
+        <a 
+          href="/api/test" 
+          style={{ 
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#FF9800',
             color: 'white',
             textDecoration: 'none',
             borderRadius: '5px'
