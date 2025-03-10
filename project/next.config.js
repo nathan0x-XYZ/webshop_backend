@@ -20,6 +20,19 @@ const nextConfig = {
   env: {
     IS_WEBCONTAINER: process.env.IS_WEBCONTAINER || 'false',
   },
+
+  // 禁用 image optimization，避免可能的問題
+  images: {
+    unoptimized: true,
+  },
+
+  // 確保所有路由都能正確處理
+  trailingSlash: false,
+  
+  // 確保正確處理 API 路由
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client'],
+  },
 }
 
 module.exports = nextConfig
