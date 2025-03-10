@@ -2,34 +2,42 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-      <h1 style={{ color: '#0070f3' }}>Fashion Inventory System</h1>
-      <p>Welcome to the Fashion Inventory System</p>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Fashion Inventory System</h1>
       
-      <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-        <h2>測試頁面</h2>
-        <a href="/minimal" style={{ color: '#0070f3', textDecoration: 'underline' }}>
-          極簡測試頁面
-        </a>
-        <a href="/test-simple" style={{ color: '#0070f3', textDecoration: 'underline' }}>
-          簡單測試頁面
-        </a>
-        <a href="/db-test" style={{ color: '#0070f3', textDecoration: 'underline' }}>
-          數據庫連接測試頁面
-        </a>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Link href="/dashboard" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2">儀表板</h2>
+          <p className="text-gray-600">查看庫存概況和重要指標</p>
+        </Link>
+        
+        <Link href="/products" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2">產品管理</h2>
+          <p className="text-gray-600">管理產品目錄和庫存水平</p>
+        </Link>
+        
+        <Link href="/categories" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2">類別管理</h2>
+          <p className="text-gray-600">管理產品類別和分類</p>
+        </Link>
+        
+        <Link href="/orders" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2">訂單管理</h2>
+          <p className="text-gray-600">處理訂單和跟踪訂單狀態</p>
+        </Link>
+        
+        <Link href="/suppliers" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2">供應商管理</h2>
+          <p className="text-gray-600">管理供應商和採購訂單</p>
+        </Link>
+        
+        <Link href="/reports" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2">報表和分析</h2>
+          <p className="text-gray-600">生成庫存報表和銷售分析</p>
+        </Link>
       </div>
       
-      <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-        <h2>測試 API</h2>
-        <a href="/api/test-simple" style={{ color: '#0070f3', textDecoration: 'underline' }}>
-          簡單測試 API
-        </a>
-        <a href="/api/db-test" style={{ color: '#0070f3', textDecoration: 'underline' }}>
-          數據庫連接測試 API
-        </a>
-      </div>
-      
-      <div style={{ marginTop: '30px', fontSize: '0.8rem', color: '#666' }}>
+      <div className="mt-8 text-sm text-gray-500">
         <p>頁面生成時間: {new Date().toISOString()}</p>
       </div>
     </div>
