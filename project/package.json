@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} scripts/seed.ts",
+    "seed": "npx prisma db seed",
     "vercel-build": "prisma generate && next build",
     "vercel-deploy": "vercel --prod"
   },
@@ -81,6 +81,7 @@
     "ts-node": "^10.9.2"
   },
   "prisma": {
-    "schema": "prisma/schema.prisma"
+    "schema": "prisma/schema.prisma",
+    "seed": "ts-node scripts/seed.ts"
   }
 }
