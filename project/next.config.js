@@ -16,8 +16,8 @@ const nextConfig = {
   },
   // 添加環境變量配置
   env: {
-    IS_WEBCONTAINER: true,
-    JWT_SECRET: 'fashion-inventory-jwt-secret-key',
+    IS_WEBCONTAINER: process.env.IS_WEBCONTAINER || "false",
+    JWT_SECRET: process.env.JWT_SECRET || 'fashion-inventory-jwt-secret-key',
   },
   // 確保 Vercel 可以正確處理 API 路由
   async rewrites() {
@@ -25,9 +25,13 @@ const nextConfig = {
       {
         source: '/api/:path*',
         destination: '/api/:path*',
-      }
-    ]
-  }
+      },
+      {
+        source: '/',
+        destination: '/index.html',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
