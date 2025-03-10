@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && SKIP_TYPE_CHECK=true next build || next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} scripts/seed.ts",
-    "vercel-build": "prisma generate && prisma migrate deploy && SKIP_TYPE_CHECK=true next build || next build"
+    "vercel-build": "prisma generate && ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/vercel-deploy.ts && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
