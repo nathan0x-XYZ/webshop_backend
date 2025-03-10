@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} scripts/seed.ts",
-    "vercel-build": "prisma generate && ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/vercel-deploy.ts && next build",
+    "vercel-build": "node vercel-deploy.js && next build",
     "vercel-deploy": "vercel --prod"
   },
   "dependencies": {

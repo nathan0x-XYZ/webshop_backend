@@ -1,6 +1,15 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next"
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".next",
+  "routes": [
+    { "src": "/test.html", "dest": "/test.html" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "env": {
+    "IS_WEBCONTAINER": "false",
+    "NODE_ENV": "production"
+  }
 }
