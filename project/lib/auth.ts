@@ -59,13 +59,15 @@ export async function verifyJWT(token: string): Promise<AuthUser | null> {
 // Function to get current user from cookies
 export async function getCurrentUser(): Promise<AuthUser | null> {
   try {
-    // 檢查是否在構建過程中或 Vercel 部署過程中
-    if (typeof window === 'undefined' && 
-        (process.env.NODE_ENV === 'production' || 
-         process.env.VERCEL || 
-         process.env.VERCEL_URL || 
-         !process.env.VERCEL_URL)) {
-      console.log('Running during build or deployment process, returning test user');
+    // 在 Vercel 環境中始終返回測試用戶
+    if (process.env.VERCEL || process.env.VERCEL_URL) {
+      console.log('Running in Vercel environment, returning test user');
+      return getTestUser();
+    }
+    
+    // 檢查是否在構建過程中
+    if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
+      console.log('Running during build process, returning test user');
       return getTestUser();
     }
     
@@ -86,19 +88,11 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
       
       return await verifyJWT(token);
     } catch (cookieError) {
-      console.log('Error accessing cookies, might be during build or deployment:', cookieError);
-      // 在 Vercel 環境中，返回測試用戶
-      if (process.env.VERCEL || process.env.VERCEL_URL) {
-        return getTestUser();
-      }
+      console.log('Error accessing cookies:', cookieError);
       return null;
     }
   } catch (error) {
     console.error("Error getting current user:", error);
-    // 在 Vercel 環境中，返回測試用戶
-    if (process.env.VERCEL || process.env.VERCEL_URL) {
-      return getTestUser();
-    }
     return null;
   }
 }
