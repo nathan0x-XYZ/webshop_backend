@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "buildCommand": "npm run vercel-build",
-  "installCommand": "npm install",
-  "outputDirectory": ".next",
-  "env": {
-    "IS_WEBCONTAINER": "false",
-    "NODE_ENV": "production"
-  }
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
 }

@@ -34,7 +34,10 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
     serverActions: true,
   },
-
+  
+  // 關閉源碼映射，減少構建大小
+  productionBrowserSourceMaps: false,
+  
   // 禁用 webpack 5 的一些功能，避免與某些庫的兼容性問題
   webpack: (config) => {
     return config;
