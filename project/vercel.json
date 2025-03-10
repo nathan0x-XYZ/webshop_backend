@@ -1,6 +1,8 @@
 {
   "version": 2,
-  "framework": "nextjs",
+  "public": true,
+  "cleanUrls": true,
+  "regions": ["sin1"],
   "env": {
     "IS_WEBCONTAINER": "false"
   }
