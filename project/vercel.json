@@ -14,5 +14,14 @@
   ],
   "env": {
     "NEXT_PUBLIC_VERCEL_URL": "${VERCEL_URL}"
+  },
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "github": {
+    "silent": true
   }
 }

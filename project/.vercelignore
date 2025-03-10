@@ -1,0 +1,7 @@
+.git
+node_modules
+.next
+.vercel
+README.md
+.env
+.env.local
