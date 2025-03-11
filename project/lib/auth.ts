@@ -15,14 +15,39 @@ const isVercelPreview = () => {
   return process.env.VERCEL_ENV === 'preview' || process.env.IS_WEBCONTAINER === 'true';
 };
 
-// 為預覽環境創建一個測試用戶
-const getTestUser = (): AuthUser => {
-  return {
-    id: 'test-user-id',
-    email: 'admin@example.com',
-    name: 'Test Admin',
-    role: UserRole.ADMIN,
-  };
+// 為預覽環境創建測試用戶
+const getTestUser = (role: UserRole = UserRole.MANAGER): AuthUser => {
+  // 根據角色返回不同的測試用戶
+  switch (role) {
+    case UserRole.ADMIN:
+      return {
+        id: 'test-admin-id',
+        email: 'admin@example.com',
+        name: 'Test Admin',
+        role: UserRole.ADMIN,
+      };
+    case UserRole.MANAGER:
+      return {
+        id: 'test-manager-id',
+        email: 'manager@example.com',
+        name: 'Test Manager',
+        role: UserRole.MANAGER,
+      };
+    case UserRole.STAFF:
+      return {
+        id: 'test-staff-id',
+        email: 'staff@example.com',
+        name: 'Test Staff',
+        role: UserRole.STAFF,
+      };
+    default:
+      return {
+        id: 'test-manager-id',
+        email: 'manager@example.com',
+        name: 'Test Manager',
+        role: UserRole.MANAGER,
+      };
+  }
 };
 
 // Function to sign JWT
@@ -59,22 +84,19 @@ export async function verifyJWT(token: string): Promise<AuthUser | null> {
 // Function to get current user from cookies
 export async function getCurrentUser(): Promise<AuthUser | null> {
   try {
-    // 在 Vercel 環境中始終返回測試用戶
-    if (process.env.VERCEL || process.env.VERCEL_URL) {
-      console.log('Running in Vercel environment, returning test user');
-      return getTestUser();
-    }
-    
-    // 檢查是否在構建過程中
-    if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
-      console.log('Running during build process, returning test user');
-      return getTestUser();
+    // 檢查是否在構建過程中或 Vercel 部署過程中
+    if (typeof window === 'undefined' && 
+        (process.env.NODE_ENV === 'production' || 
+         process.env.VERCEL || 
+         process.env.VERCEL_URL)) {
+      console.log('Running during build or in Vercel environment, returning test MANAGER user');
+      return getTestUser(UserRole.MANAGER);
     }
     
     // 在預覽環境中返回測試用戶
     if (isVercelPreview()) {
       console.log('Using test user for preview environment');
-      return getTestUser();
+      return getTestUser(UserRole.MANAGER);
     }
     
     try {
@@ -88,11 +110,19 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
       
       return await verifyJWT(token);
     } catch (cookieError) {
-      console.log('Error accessing cookies:', cookieError);
+      console.log('Error accessing cookies, might be during build or deployment:', cookieError);
+      // 在 Vercel 環境中，返回測試用戶
+      if (process.env.VERCEL || process.env.VERCEL_URL) {
+        return getTestUser(UserRole.MANAGER);
+      }
       return null;
     }
   } catch (error) {
     console.error("Error getting current user:", error);
+    // 在 Vercel 環境中，返回測試用戶
+    if (process.env.VERCEL || process.env.VERCEL_URL) {
+      return getTestUser(UserRole.MANAGER);
+    }
     return null;
   }
 }
