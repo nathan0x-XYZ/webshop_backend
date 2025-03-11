@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -14,9 +14,14 @@ export async function GET(request: NextRequest) {
     }
 
     // 從數據庫獲取所有庫存盤點單
-    const inventoryAudits = await db.inventoryAudit.findMany({
+    const inventoryAudits = await prisma.inventoryAudit.findMany({
       include: {
         warehouse: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
       },
       orderBy: {
         updatedAt: 'desc',

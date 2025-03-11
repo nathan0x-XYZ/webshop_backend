@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 從數據庫獲取所有供應商
-    const suppliers = await db.supplier.findMany({
+    const suppliers = await prisma.supplier.findMany({
       orderBy: {
         updatedAt: 'desc',
       },

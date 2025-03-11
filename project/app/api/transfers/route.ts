@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -14,10 +14,15 @@ export async function GET(request: NextRequest) {
     }
 
     // 從數據庫獲取所有調撥單
-    const transfers = await db.transfer.findMany({
+    const transfers = await prisma.transferOrder.findMany({
       include: {
         sourceWarehouse: true,
         destinationWarehouse: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
       },
       orderBy: {
         updatedAt: 'desc',
