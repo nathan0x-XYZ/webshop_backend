@@ -10,7 +10,10 @@
     "postinstall": "prisma generate",
     "seed": "npx prisma db seed",
     "vercel-build": "npm install && prisma generate && next build",
-    "vercel-deploy": "vercel --prod"
+    "vercel-deploy": "vercel --prod",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -76,8 +79,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prisma": "^6.4.1",
+    "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2"
   },
   "prisma": {
