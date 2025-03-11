@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '@/app/api/transfers/route';
 import { prisma } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -16,7 +16,67 @@ jest.mock('@/lib/auth', () => ({
   getCurrentUser: jest.fn(),
 }));
 
+// 確保 NextResponse 被正確模擬
+jest.mock('next/server', () => {
+  return {
+    NextResponse: {
+      json: jest.fn().mockImplementation((data, options = {}) => {
+        return {
+          status: options.status || 200,
+          headers: new Map(),
+          json: async () => data,
+        };
+      }),
+    },
+    NextRequest: jest.fn().mockImplementation((url) => ({
+      url: url || 'http://localhost/',
+      method: 'GET',
+      headers: new Map(),
+      json: async () => ({}),
+      text: async () => '',
+      clone: () => ({ url: url || 'http://localhost/' }),
+    })),
+  };
+});
+
 describe('Transfers API Route', () => {
+  // 獲取當前日期的字符串表示
+  const currentDate = new Date().toISOString();
+  
+  // 模擬調撥單數據
+  const mockTransfers = [
+    {
+      id: '1',
+      status: 'PENDING',
+      sourceWarehouse: { id: '1', name: '台北倉庫' },
+      destinationWarehouse: { id: '2', name: '高雄倉庫' },
+      items: [
+        {
+          id: '1',
+          product: { id: '1', name: '測試產品 1', sku: 'TEST-001' },
+          quantity: 10,
+        },
+      ],
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    },
+    {
+      id: '2',
+      status: 'COMPLETED',
+      sourceWarehouse: { id: '2', name: '高雄倉庫' },
+      destinationWarehouse: { id: '1', name: '台北倉庫' },
+      items: [
+        {
+          id: '2',
+          product: { id: '2', name: '測試產品 2', sku: 'TEST-002' },
+          quantity: 5,
+        },
+      ],
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    },
+  ];
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -42,44 +102,6 @@ describe('Transfers API Route', () => {
       email: 'test@example.com',
       role: 'MANAGER',
     });
-
-    // 模擬調撥單數據
-    const mockTransfers = [
-      {
-        id: '1',
-        orderNumber: 'TR-001',
-        status: 'PENDING',
-        notes: '測試調撥單',
-        sourceWarehouse: { id: '1', name: '台北倉庫' },
-        destinationWarehouse: { id: '2', name: '高雄倉庫' },
-        items: [
-          {
-            id: '1',
-            quantity: 10,
-            product: { id: '1', name: '測試產品 1', sku: 'TEST-001' },
-          }
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: '2',
-        orderNumber: 'TR-002',
-        status: 'COMPLETED',
-        notes: '測試調撥單 2',
-        sourceWarehouse: { id: '2', name: '高雄倉庫' },
-        destinationWarehouse: { id: '1', name: '台北倉庫' },
-        items: [
-          {
-            id: '2',
-            quantity: 5,
-            product: { id: '2', name: '測試產品 2', sku: 'TEST-002' },
-          }
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
 
     (prisma.transferOrder.findMany as jest.Mock).mockResolvedValue(mockTransfers);
 

@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '@/app/api/warehouses/route';
 import { prisma } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -16,7 +16,57 @@ jest.mock('@/lib/auth', () => ({
   getCurrentUser: jest.fn(),
 }));
 
+// 確保 NextResponse 被正確模擬
+jest.mock('next/server', () => {
+  return {
+    NextResponse: {
+      json: jest.fn().mockImplementation((data, options = {}) => {
+        return {
+          status: options.status || 200,
+          headers: new Map(),
+          json: async () => data,
+        };
+      }),
+    },
+    NextRequest: jest.fn().mockImplementation((url) => ({
+      url: url || 'http://localhost/',
+      method: 'GET',
+      headers: new Map(),
+      json: async () => ({}),
+      text: async () => '',
+      clone: () => ({ url: url || 'http://localhost/' }),
+    })),
+  };
+});
+
 describe('Warehouses API Route', () => {
+  // 獲取當前日期的字符串表示
+  const currentDate = new Date().toISOString();
+  
+  // 模擬倉庫數據
+  const mockWarehouses = [
+    {
+      id: '1',
+      name: '台北倉庫',
+      address: '台北市信義區101號',
+      contactPerson: '張三',
+      contactPhone: '0912345678',
+      isActive: true,
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    },
+    {
+      id: '2',
+      name: '高雄倉庫',
+      address: '高雄市前鎮區123號',
+      contactPerson: '李四',
+      contactPhone: '0987654321',
+      isActive: true,
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    },
+  ];
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -42,30 +92,6 @@ describe('Warehouses API Route', () => {
       email: 'test@example.com',
       role: 'MANAGER',
     });
-
-    // 模擬倉庫數據
-    const mockWarehouses = [
-      {
-        id: '1',
-        name: '台北倉庫',
-        address: '台北市信義區101號',
-        contactPerson: '張三',
-        contactPhone: '0912345678',
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: '2',
-        name: '高雄倉庫',
-        address: '高雄市前鎮區123號',
-        contactPerson: '李四',
-        contactPhone: '0987654321',
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
 
     (prisma.warehouse.findMany as jest.Mock).mockResolvedValue(mockWarehouses);
 

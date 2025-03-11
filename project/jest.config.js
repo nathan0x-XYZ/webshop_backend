@@ -8,7 +8,7 @@ const createJestConfig = nextJest({
 // 自定義 Jest 配置
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'jest-environment-node',  // 改為 node 環境
   moduleNameMapper: {
     // 處理模塊別名
     '^@/(.*)$': '<rootDir>/$1',
@@ -16,6 +16,11 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/.next/',
+    '<rootDir>/tests/',  // 忽略 Playwright 測試
+  ],
+  transformIgnorePatterns: [
+    '/node_modules/',
+    '^.+\\.module\\.(css|sass|scss)$',
   ],
 };
 

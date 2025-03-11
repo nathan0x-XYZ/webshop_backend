@@ -23,6 +23,17 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    // 根據用戶角色處理成本價可見性
+    // 只有 ADMIN 用戶可以看到成本價
+    if (user.role !== 'ADMIN') {
+      // 對於非 ADMIN 用戶，移除所有產品的成本價
+      const productsWithoutCostPrice = products.map(product => {
+        const { costPrice, ...productWithoutCostPrice } = product;
+        return productWithoutCostPrice;
+      });
+      return NextResponse.json(productsWithoutCostPrice);
+    }
+
     return NextResponse.json(products);
   } catch (error) {
     console.error("獲取產品時出錯:", error);

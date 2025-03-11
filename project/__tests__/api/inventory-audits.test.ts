@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '@/app/api/inventory-audits/route';
 import { prisma } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
@@ -16,7 +16,73 @@ jest.mock('@/lib/auth', () => ({
   getCurrentUser: jest.fn(),
 }));
 
+// 確保 NextResponse 被正確模擬
+jest.mock('next/server', () => {
+  return {
+    NextResponse: {
+      json: jest.fn().mockImplementation((data, options = {}) => {
+        return {
+          status: options.status || 200,
+          headers: new Map(),
+          json: async () => data,
+        };
+      }),
+    },
+    NextRequest: jest.fn().mockImplementation((url) => ({
+      url: url || 'http://localhost/',
+      method: 'GET',
+      headers: new Map(),
+      json: async () => ({}),
+      text: async () => '',
+      clone: () => ({ url: url || 'http://localhost/' }),
+    })),
+  };
+});
+
 describe('Inventory Audits API Route', () => {
+  // 獲取當前日期的字符串表示
+  const currentDate = new Date().toISOString();
+  
+  // 模擬庫存盤點單數據
+  const mockAudits = [
+    {
+      id: '1',
+      auditNumber: 'IA-001',
+      status: 'PENDING',
+      notes: '測試庫存稽核',
+      warehouse: { id: '1', name: '台北倉庫' },
+      items: [
+        {
+          id: '1',
+          product: { id: '1', name: '測試產品 1', sku: 'TEST-001' },
+          expectedQuantity: 100,
+          actualQuantity: 95,
+          discrepancy: -5,
+        },
+      ],
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    },
+    {
+      id: '2',
+      auditNumber: 'IA-002',
+      status: 'COMPLETED',
+      notes: '測試庫存稽核 2',
+      warehouse: { id: '2', name: '高雄倉庫' },
+      items: [
+        {
+          id: '2',
+          product: { id: '2', name: '測試產品 2', sku: 'TEST-002' },
+          expectedQuantity: 50,
+          actualQuantity: 52,
+          discrepancy: 2,
+        },
+      ],
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    },
+  ];
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -42,46 +108,6 @@ describe('Inventory Audits API Route', () => {
       email: 'test@example.com',
       role: 'MANAGER',
     });
-
-    // 模擬庫存稽核數據
-    const mockAudits = [
-      {
-        id: '1',
-        auditNumber: 'IA-001',
-        status: 'PENDING',
-        notes: '測試庫存稽核',
-        warehouse: { id: '1', name: '台北倉庫' },
-        items: [
-          {
-            id: '1',
-            expectedQuantity: 100,
-            actualQuantity: 95,
-            discrepancy: -5,
-            product: { id: '1', name: '測試產品 1', sku: 'TEST-001' },
-          }
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: '2',
-        auditNumber: 'IA-002',
-        status: 'COMPLETED',
-        notes: '測試庫存稽核 2',
-        warehouse: { id: '2', name: '高雄倉庫' },
-        items: [
-          {
-            id: '2',
-            expectedQuantity: 50,
-            actualQuantity: 52,
-            discrepancy: 2,
-            product: { id: '2', name: '測試產品 2', sku: 'TEST-002' },
-          }
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
 
     (prisma.inventoryAudit.findMany as jest.Mock).mockResolvedValue(mockAudits);
 
